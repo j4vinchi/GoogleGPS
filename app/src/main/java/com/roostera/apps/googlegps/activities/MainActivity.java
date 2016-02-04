@@ -1,12 +1,13 @@
 package com.roostera.apps.googlegps.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 import com.roostera.apps.googlegps.R;
 import com.roostera.apps.googlegps.eventbus.LocationUpdateEvent;
 import com.roostera.apps.googlegps.services.LocationUpdateService;
@@ -19,6 +20,7 @@ public class MainActivity
     private static final String TAG = MainActivity.class.getSimpleName();
     private EventBus bus = EventBus.getDefault();
     private Intent intent;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +35,12 @@ public class MainActivity
         btnStartService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog = ProgressDialog.show(MainActivity.this, "Buscando tu ubicación", "Espera...", true);
+                dialog.show();
                 //start service
                 intent = new Intent(MainActivity.this, LocationUpdateService.class);
                 startService(intent);
+
             }
         });
         btnStopService = (Button) findViewById(R.id.btnStopService);
@@ -47,12 +52,16 @@ public class MainActivity
             }
         });
     }
+    private void launchActivity(Location location){
+        Intent i = new Intent(this, ShowGpsCoordinatesActivity.class);
+        i.putExtra("location", location);
+        startActivity(i);
+    }
     public void onEvent(LocationUpdateEvent event){
+        dialog.dismiss();
         Log.d(TAG, "Location changed!");
-        Toast.makeText(
-                this,
-                "New location LAT:"+event.getLocation().getLatitude()+",LNG:"+event.getLocation().getLongitude(),
-                Toast.LENGTH_SHORT).show();
+        stopService();
+        launchActivity(event.getLocation());
     }
     @Override
     protected void onStop() {

@@ -1,13 +1,11 @@
 package com.roostera.apps.googlegps.services;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
