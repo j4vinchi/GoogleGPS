@@ -16,8 +16,11 @@ import de.greenrobot.event.EventBus;
 
 public class LocationUpdateService extends Service
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+    public LocationUpdateService() {
+    }
 
     private static final String TAG = LocationUpdateService.class.getSimpleName();
+    private static String ACTIVITY = "";
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
@@ -27,13 +30,21 @@ public class LocationUpdateService extends Service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "Service running");
+        readData(intent);
         callConnection();
         return Service.START_STICKY;
     }
 
+    private void readData(Intent intent){
+        Bundle extras = intent.getExtras();
+        if (extras != null){
+            ACTIVITY = extras.getString("TAG");
+        }
+    }
+
     private void initLocationRequest() {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(5000); //5 secocds
+        mLocationRequest.setInterval(5000); //5 seconds
         mLocationRequest.setFastestInterval(2000); //2 seconds
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY); //most accurate, more power consume
     }
@@ -83,13 +94,18 @@ public class LocationUpdateService extends Service
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "onDestry");
         mGoogleApiClient.disconnect();
         super.onDestroy();
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        event = new LocationUpdateEvent(location);
+        event = new LocationUpdateEvent(location, ACTIVITY);
         bus.post(event);
+    }
+
+    public Location getmLastLocation() {
+        return mLastLocation;
     }
 }

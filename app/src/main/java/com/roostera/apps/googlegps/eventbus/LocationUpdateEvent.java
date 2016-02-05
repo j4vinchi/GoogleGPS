@@ -7,12 +7,16 @@ import android.location.Location;
  */
 public class LocationUpdateEvent {
     private Location location;
+    private String activity;
 
-    public LocationUpdateEvent(Location location){
+    public LocationUpdateEvent(Location location, String activity){
         this.location = location;
+        this.activity = activity;
     }
-
     public Location getLocation(){
         return location;
+    }
+    public String getActivity(){
+        return activity;
     }
 }

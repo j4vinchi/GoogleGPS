@@ -23,7 +23,10 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="LATITUD"
-        android:id="@+id/tvLatitud" />
+        android:id="@+id/tvLatitud"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="34dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -32,5 +35,6 @@
         android:text="LONGITUD"
         android:id="@+id/tvLongitud"
         android:layout_below="@+id/tvLatitud"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp" />
 </RelativeLayout>

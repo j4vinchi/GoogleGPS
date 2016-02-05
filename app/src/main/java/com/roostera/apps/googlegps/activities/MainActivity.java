@@ -39,6 +39,7 @@ public class MainActivity
                 dialog.show();
                 //start service
                 intent = new Intent(MainActivity.this, LocationUpdateService.class);
+                intent.putExtra("TAG", TAG);
                 startService(intent);
 
             }
@@ -58,10 +59,12 @@ public class MainActivity
         startActivity(i);
     }
     public void onEvent(LocationUpdateEvent event){
-        dialog.dismiss();
-        Log.d(TAG, "Location changed!");
-        stopService();
-        launchActivity(event.getLocation());
+        if (TAG.equals(event.getActivity())){
+            dialog.dismiss();
+            Log.d(TAG, "Location changed!");
+            stopService();
+            launchActivity(event.getLocation());
+        }
     }
     @Override
     protected void onStop() {
